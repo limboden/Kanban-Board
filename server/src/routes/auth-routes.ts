@@ -6,6 +6,11 @@ import bcrypt from 'bcrypt';
 export const login = async (req: Request, res: Response) => {
   // TODO: If the user exists and the password is correct, return a JWT token
   const { username, password } = req.body;
+  const JWTkey = process.env.JWT_SECRET_KEY
+
+  if (!JWTkey) {
+    throw new Error('JWTkey is not defined in .env')
+  }
 
   try {
     const user: User | null = await User.findOne({ where: { username } });
@@ -27,7 +32,12 @@ export const login = async (req: Request, res: Response) => {
       return; //get out
     }
 
+    //generate jwt token
+    const token = jwt.sign({ username: user.username }, JWTkey, { expiresIn: '1h' });
+    console.log("Generated JWT token: ", token);
 
+
+    res.json({ token });
 
   } catch (error) {
     console.error("Error during login:", error);
