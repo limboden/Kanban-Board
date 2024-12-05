@@ -8,7 +8,12 @@ export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
+    const user: User | null = await User.findOne({ where: { username } });
+    console.log("User found:", user);
 
+    if (!user) {
+      res.status(401).json({ error: 'Invalid username of password' });
+    }
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: 'An error occurred while logging in' });
