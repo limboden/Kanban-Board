@@ -2,15 +2,21 @@ import { Router, Request, Response } from 'express';
 import { User } from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv'
 
+dotenv.config();
+const router = Router();
+
+const JWTkey = process.env.JWT_SECRET_KEY
+if (!JWTkey) {
+  throw new Error('JWTkey is not defined in .env')
+}
 export const login = async (req: Request, res: Response) => {
   // TODO: If the user exists and the password is correct, return a JWT token
   const { username, password } = req.body;
-  const JWTkey = process.env.JWT_SECRET_KEY
 
-  if (!JWTkey) {
-    throw new Error('JWTkey is not defined in .env')
-  }
+
+
 
   try {
     const user: User | null = await User.findOne({ where: { username } });
@@ -46,7 +52,7 @@ export const login = async (req: Request, res: Response) => {
 
 };
 
-const router = Router();
+
 
 // POST /login - Login a user
 router.post('/login', login);
