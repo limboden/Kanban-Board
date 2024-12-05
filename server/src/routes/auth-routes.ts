@@ -12,11 +12,7 @@ if (!JWTkey) {
   throw new Error('JWTkey is not defined in .env')
 }
 export const login = async (req: Request, res: Response) => {
-  // TODO: If the user exists and the password is correct, return a JWT token
   const { username, password } = req.body;
-
-
-
 
   try {
     const user: User | null = await User.findOne({ where: { username } });
