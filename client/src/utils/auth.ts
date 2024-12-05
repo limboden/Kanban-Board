@@ -27,7 +27,7 @@ class AuthService {
   }
 
   getToken(): string | null {
-    // TODO: return the token
+    // return the token
     return localStorage.getItem('id_token');
   }
 
